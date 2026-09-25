@@ -1,2 +1,0 @@
-<taf-app:container:ghcr.io/taffish/csvtk:0.37.0-r1>
-csvtk ::*ARGV*::
