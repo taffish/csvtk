@@ -1,0 +1,5 @@
+**
+!docker/
+!docker/Dockerfile
+!docker/licenses.tar.gz
+!docker/smoke.sh

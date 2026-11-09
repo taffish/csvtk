@@ -1,5 +1,5 @@
 #!/bin/sh
-# 独立模式；所有输入和输出均位于本次私有 scratch，不访问网络或安装树。
+# Each mode runs offline in a new private scratch directory.
 set -eu
 mode=${1:?expected smoke mode}
 scratch=$(mktemp -d /tmp/taf-csvtk.XXXXXX)
@@ -20,7 +20,7 @@ cd "$scratch"
 case "$mode" in
   identity)
     csvtk --version > version.log
-    grep -Fx 'csvtk v0.38.0' version.log
+    grep -Fx 'csvtk v0.39.0' version.log
     csvtk --help > help.log
     grep -F 'CSV/TSV toolkit' help.log
     for sub in summary join csv2xlsx plot csv2html long2matrix matrix2long paste; do
@@ -118,6 +118,35 @@ case "$mode" in
     grep -F 'invalid table width' invalid.log
     if csvtk csv2html missing.csv > missing.log 2>&1; then exit 1; fi
     grep -F 'missing.csv' missing.log
+    ;;
+  safety)
+    printf 'id,n\na,1\nb,2\n' > data.csv
+    cp data.csv expected
+    ln -s data.csv alias.csv
+    ln data.csv hard.csv
+    for name in data.csv ./data.csv alias.csv hard.csv; do
+        if csvtk cut -f id data.csv -o "$name" > out.log 2> err.log; then exit 1; fi
+        grep -F 'same file' err.log; test ! -s out.log; cmp expected data.csv
+    done
+    printf 'a\n' > keys; ln -s keys keys-link
+    if csvtk grep -f id -P keys data.csv -o keys-link > out.log 2> err.log; then exit 1; fi
+    grep -F 'same file' err.log; printf 'a\n' > expected-keys; cmp expected-keys keys
+    printf 'id\n1\n' > one.csv; printf 'id\n2\n' > second.csv
+    printf 'second.csv\n' > files.list
+    csvtk concat -X files.list - < one.csv > concat.log
+    grep -Fx '1' concat.log; grep -Fx '2' concat.log
+    ;;
+  roundtrips)
+    awk 'BEGIN{for (r=1;r<=2;r++){for (i=1;i<=703;i++) printf "%s%s%d",i==1?"":",",r==1?"f":"val",i;print ""}}' > wide.csv
+    csvtk csv2xlsx wide.csv -o wide.xlsx
+    csvtk xlsx2csv wide.xlsx > restored.csv; cmp wide.csv restored.csv
+    printf 'a,b\n"x|y\nz",q\n' > special.csv
+    csvtk csv2md special.csv > md.log; grep -F 'x\|y<br>z' md.log
+    printf 'sample,[v],count\na,1,7\nb,2,8\n' > selections.csv
+    csvtk cut -f '[v]' selections.csv > cut.log
+    printf '[v]\n1\n2\n' > expected; cmp expected cut.log
+    csvtk cut -f '2-' selections.csv > cut.log
+    printf '[v],count\n1,7\n2,8\n' > expected; cmp expected cut.log
     ;;
   *) printf 'unknown smoke mode: %s\n' "$mode" >&2; exit 2 ;;
 esac

@@ -1,7 +1,7 @@
 [package]
 name = "csvtk"
 kind = "tool"
-version = "0.38.0"
+version = "0.39.0"
 release = 1
 license = "Apache-2.0"
 main = "src/main.taf"
@@ -17,7 +17,7 @@ pipe = true
 command_mode = true
 
 [container]
-image = "ghcr.io/taffish/csvtk:0.38.0-r1"
+image = "ghcr.io/taffish/csvtk:0.39.0-r1"
 dockerfile = "docker/Dockerfile"
 build_platforms = "linux/amd64,linux/arm64"
 
@@ -33,9 +33,9 @@ type = "github"
 repo = "shenwei356/csvtk"
 homepage = "https://bioinf.shenwei.me/csvtk/"
 manual = "https://bioinf.shenwei.me/csvtk/usage/"
-release_url = "https://github.com/shenwei356/csvtk/releases/tag/v0.38.0"
-downloads = "https://github.com/shenwei356/csvtk/releases/download/v0.38.0/csvtk_linux_amd64.tar.gz; https://github.com/shenwei356/csvtk/releases/download/v0.38.0/csvtk_linux_arm64.tar.gz"
-version = "0.38.0"
+release_url = "https://github.com/shenwei356/csvtk/releases/tag/v0.39.0"
+downloads = "https://github.com/shenwei356/csvtk/releases/download/v0.39.0/csvtk_linux_amd64.tar.gz; https://github.com/shenwei356/csvtk/releases/download/v0.39.0/csvtk_linux_arm64.tar.gz"
+version = "0.39.0"
 license = "MIT"
 citation = "No dedicated csvtk paper was found in the upstream README; cite the upstream project and version."
 watch = "tags"
@@ -44,5 +44,5 @@ strip_prefix = "v"
 [smoke]
 backend = "docker"
 timeout = 120
-exist = ["csvtk", "sh", "grep", "ldd", "mktemp", "cmp", "tail", "od", "tr", "head", "find", "wc", "rm"]
-test = ["sh /opt/csvtk/share/smoke.sh identity", "sh /opt/csvtk/share/smoke.sh tables", "sh /opt/csvtk/share/smoke.sh formats", "sh /opt/csvtk/share/smoke.sh joins", "sh /opt/csvtk/share/smoke.sh xlsx", "sh /opt/csvtk/share/smoke.sh reshape", "sh /opt/csvtk/share/smoke.sh changes", "sh /opt/csvtk/share/smoke.sh graphics", "sh /opt/csvtk/share/smoke.sh html"]
+exist = ["csvtk", "sh", "grep", "ldd", "mktemp", "cmp", "tail", "od", "tr", "head", "find", "wc", "rm", "awk", "ln", "cp"]
+test = ["sh /opt/csvtk/share/smoke.sh identity", "sh /opt/csvtk/share/smoke.sh tables", "sh /opt/csvtk/share/smoke.sh formats", "sh /opt/csvtk/share/smoke.sh joins", "sh /opt/csvtk/share/smoke.sh xlsx", "sh /opt/csvtk/share/smoke.sh reshape", "sh /opt/csvtk/share/smoke.sh changes", "sh /opt/csvtk/share/smoke.sh graphics", "sh /opt/csvtk/share/smoke.sh html", "sh /opt/csvtk/share/smoke.sh safety", "sh /opt/csvtk/share/smoke.sh roundtrips"]

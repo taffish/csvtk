@@ -1,0 +1,6 @@
+{
+  "artifact": "taf-csvtk-v0.39.0-r1",
+  "schema": "taffish.build/v1",
+  "source_sha256": "b0f6478ff870ff03767d5c5d67306bc7ae7cdfaefc10867fb9b1e44c2c9dcbb2",
+  "wrapper_sha256": "213428c9e2b75b08b3b5f35ee2ff27b5dc71b97e5ff86f94a5ceabf44bc998dd"
+}
